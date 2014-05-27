@@ -3,67 +3,67 @@ package com.h2s.jw.main;
 import org.h2s.jw.soql.annotation.SfColumn;
 import org.h2s.jw.soql.annotation.SfObject;
 
-@SfObject(name="Account")
+/**
+ * A sample domain class that has two custom annotation <BR>
+ * - SfObject 
+ * - SfColumn
+ * 
+ * SfObject maps to the equivalent salesforce object SfColumn maps to the
+ * equivalent column of the selected salesforce object
+ * 
+ * @author johnwilfred
+ * 
+ */
+@SfObject(name = "Account")
 public class Company {
-	
-	@SfColumn(name="id")
-	private String id;
-	
-	@SfColumn(name="name")
-	private String companyName;
-	
-	@SfColumn(name="billingCity")
-	private String city;
-	
-	
-	@SfColumn(name="billingCountry")
-	private String country;
 
+	@SfColumn(name = "id")
+	private String id;
+
+	@SfColumn(name = "name")
+	private String companyName;
+
+	@SfColumn(name = "billingCity")
+	private String city;
+
+	@SfColumn(name = "billingCountry")
+	private String country;
 
 	public String getId() {
 		return id;
 	}
 
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 
 	public String getCompanyName() {
 		return companyName;
 	}
 
-
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-
 
 	public String getCity() {
 		return city;
 	}
 
-
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 
 	public String getCountry() {
 		return country;
 	}
 
-
 	public void setCountry(String country) {
 		this.country = country;
 	}
 
-
 	public Company() {
 		super();
 	}
-
 
 	public Company(String id, String companyName, String city, String country) {
 		super();
@@ -72,7 +72,6 @@ public class Company {
 		this.city = city;
 		this.country = country;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -85,7 +84,6 @@ public class Company {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -118,5 +116,5 @@ public class Company {
 			return false;
 		return true;
 	}
-	
+
 }

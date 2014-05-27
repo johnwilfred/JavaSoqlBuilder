@@ -10,7 +10,7 @@ import org.h2s.jw.soql.annotation.SfObject;
 
 
 /**
- * 
+ * Soql select mimics Salesforce SOQL
  * @author johnwilfred
  *
  */

@@ -4,110 +4,144 @@ package org.h2s.jw.soql;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SoqlConditions takes condition and conditions
+ * @author johnwilfred
+ *
+ */
 public class SoqlConditions {
-	private SoqlOperator.Logical operator;
+	private SoqlOperator.Logical logicalOperator;
 	private List<SoqlCondition> conditionList;
 	private List<SoqlConditions> conditionsList;
 	
 	public SoqlConditions() {
 		conditionList = new ArrayList<SoqlCondition>();
-		conditionsList = new ArrayList<SoqlConditions>();
+		conditionsList= new ArrayList<SoqlConditions>();
 	}
 	
-	public SoqlConditions and(SoqlConditions... conditions) {
-		this.operator = SoqlOperator.Logical.AND;
-		for (SoqlConditions condition : conditions) {
-			conditionsList.add(condition);
-		}
-		return this;
+	/**
+	 * AND operator
+	 * @param condition
+	 */
+	public void and(SoqlCondition... condition) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionList(condition);
 	}
 	
-	public SoqlConditions or(SoqlConditions... conditions) {
-		this.operator = SoqlOperator.Logical.OR;
-		for (SoqlConditions condition : conditions) {
-			conditionsList.add(condition);
-		}
-		return this;
+	/**
+	 * AND operator
+	 * @param conditions
+	 */
+	public void and(SoqlConditions... conditions) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionsList(conditions);
 	}
 	
-	public SoqlConditions and(SoqlCondition... conditions) {
-		this.operator = SoqlOperator.Logical.AND;
+	/**
+	 * AND operator
+	 * @param condition
+	 * @param conditions
+	 */
+	public void and(SoqlCondition condition,SoqlConditions conditions) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionsList(conditions);
+		setConditionList(condition);
+	}
+	
+	/**
+	 * AND operator
+	 * @param conditions
+	 * @param condition
+	 */
+	public void and(SoqlConditions conditions,SoqlCondition condition) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionsList(conditions);
+		setConditionList(condition);
+	}
+	
+	/**
+	 * OR operator
+	 * @param condition
+	 */
+	public void or(SoqlCondition... condition) {
+		this.logicalOperator = SoqlOperator.Logical.OR;
+		setConditionList(condition);
+	}
+	
+	/**
+	 * OR operator
+	 * @param conditions
+	 */
+	public void or(SoqlConditions... conditions) {
+		this.logicalOperator = SoqlOperator.Logical.OR;
+		setConditionsList(conditions);
+	}
+	
+	/**
+	 * OR operator
+	 * @param condition
+	 * @param conditions
+	 */
+	public void or(SoqlCondition condition,SoqlConditions conditions) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionsList(conditions);
+		setConditionList(condition);
+	}
+	
+	/**
+	 * OR operator
+	 * @param conditions
+	 * @param condition
+	 */
+	public void or(SoqlConditions conditions,SoqlCondition condition) {
+		this.logicalOperator = SoqlOperator.Logical.AND;
+		setConditionsList(conditions);
+		setConditionList(condition);
+	}
+	
+	private void setConditionList(SoqlCondition... conditions){
 		for (SoqlCondition condition : conditions) {
 			conditionList.add(condition);
 		}
-		return this;
 	}
 	
-	public SoqlConditions or(SoqlCondition... conditions) {
-		this.operator = SoqlOperator.Logical.OR;
-		for (SoqlCondition condition : conditions) {
-			conditionList.add(condition);
+	private void setConditionsList(SoqlConditions... conditions){
+		for (SoqlConditions condition : conditions) {
+			conditionsList.add(condition);
 		}
-		return this;
 	}
-	
-	
 	
 	@Override
 	public String toString() {
-		int idx = 0;
-		String soql  = ""; 
-		switch (operator) {
-			case AND:
-				idx=0;
-				if (conditionList.size()>0) {
-					soql  = soql + "(";
-					for (SoqlCondition condition : conditionList) {
-						if (idx++ == conditionList.size()-1) {
-							soql = soql + condition ;
-						} else {
-							soql = soql + condition + " AND ";	
-						}	
-					}
-					soql = soql + ")";
+		String soql  = "";
+			int idx=0;
+			if (conditionList.size()>0) {
+				soql  = soql + "(";
+				for (SoqlCondition condition : conditionList) {
+					if (idx++ == conditionList.size()-1) {
+						soql = soql + condition ;
+					} else {
+						soql = soql + condition + " " + logicalOperator.toString() + " ";	
+					}	
 				}
+				soql = soql + ")";
+			}
+			
+			if (conditionsList.size()>0) {
+				if (soql != "")
+					soql = soql + " " + logicalOperator.toString() + " ";
 				idx=0;
-				if (conditionsList.size()>0) {
-					soql  = soql + "(";
-					for (SoqlConditions conditions : conditionsList) {
-						if (idx++ == conditionsList.size()-1) {
-							soql = soql + conditions ;
-						} else {
-							soql = soql + conditions + " AND ";	
-						}	
-					}
-					soql = soql + ")";
+				soql  = soql + "(";
+				for (SoqlConditions conditions : conditionsList) {
+					if (idx++ == conditionsList.size()-1) {
+						soql = soql + conditions.toString() ;
+					} else {
+						soql = soql + conditions.toString() + " " + logicalOperator.toString() + " ";	
+					}	
 				}
-				break;
-			case OR:
-				idx=0;
-				if (conditionList.size()>0) {
-					soql  = soql + "(";
-					for (SoqlCondition condition : conditionList) {
-						if (idx++ == conditionList.size()-1) {
-							soql = soql + condition ;
-						} else {
-							soql = soql + condition + " OR ";	
-						}	
-					}
-					soql = soql + ")";
-				}
-				idx=0;
-				if (conditionsList.size()>0) {
-					soql  = soql + "(";
-					for (SoqlConditions conditions : conditionsList) {
-						if (idx++ == conditionsList.size()-1) {
-							soql = soql + conditions ;
-						} else {
-							soql = soql + conditions + " OR ";	
-						}	
-					}
-					soql = soql + ")";
-				}
-				break;
-		}
-		return soql;
+				soql = soql + ")";
+			}
+			return soql;
 	}
-	
 	
 }

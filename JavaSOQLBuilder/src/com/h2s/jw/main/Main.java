@@ -5,46 +5,76 @@ import org.h2s.jw.soql.SoqlConditions;
 import org.h2s.jw.soql.SoqlOperator;
 import org.h2s.jw.soql.SoqlSelect;
 
+/**
+ * The Main class demonstrates the use of SoqlSelect.
+ * 
+ * @author johnwilfred
+ * @since version 0.1
+ * 
+ */
 public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException {
+		System.out.println("Simple SOQL example");
+		Main.printSimpleSOQLExample();
+
+		System.out.println("Complex SOQL example");
+		Main.printComplexSOQLExample();
+	}
+
+	private static void printSimpleSOQLExample() {
 		SoqlSelect soql = new SoqlSelect();
 		soql.from("Account");
 		soql.columns("id");
-		
+
 		SoqlCondition condition = new SoqlCondition();
 		condition.lhs("id");
-		condition.operator(SoqlOperator.Comparison.EQ_T);
+		condition.operator(SoqlOperator.Comparison.IN);
 		condition.rhs("00O40000003Q9cR");
 		soql.where(condition);
-		
+
 		System.out.println(soql);
-		
+	}
+
+	private static void printComplexSOQLExample() throws ClassNotFoundException {
+
 		Company company = new Company();
-		soql = new SoqlSelect(company);
+		SoqlSelect soql = new SoqlSelect(company);
+
+		SoqlCondition billingCountryIsNz = new SoqlCondition();
+		SoqlCondition billingCountryIsAu = new SoqlCondition();
+		SoqlCondition revenueCheck = new SoqlCondition();
+		SoqlCondition profitCheck = new SoqlCondition();
+		
+
+		billingCountryIsNz.lhs("billingCountry");
+		billingCountryIsNz.operator(SoqlOperator.Comparison.EQ_T);
+		billingCountryIsNz.rhs("New Zeland");
+
+		billingCountryIsAu.lhs("billingCountry");
+		billingCountryIsAu.operator(SoqlOperator.Comparison.EQ_T);
+		billingCountryIsAu.rhs("Australia");
+		
+		revenueCheck.lhs("revenue");
+		revenueCheck.operator(SoqlOperator.Comparison.LE);
+		revenueCheck.rhs("200000");
+		
+		profitCheck.lhs("profit");
+		profitCheck.operator(SoqlOperator.Comparison.GT);
+		profitCheck.rhs("100000");
+		
+		SoqlConditions conditions1 = new SoqlConditions();
+		conditions1.and(billingCountryIsNz,billingCountryIsAu);
+		
+		SoqlConditions conditions2 = new SoqlConditions();
+		conditions2.or(billingCountryIsAu,profitCheck);
 		
 		
-		SoqlCondition condition1 = new SoqlCondition();
-		SoqlCondition condition2 = new SoqlCondition();
+		SoqlConditions conditions3 = new SoqlConditions();
+		conditions3.and(conditions1,conditions2);
 		
-		condition1.lhs("billingCity");
-		condition1.operator(SoqlOperator.Comparison.EQ_T);
-		condition1.rhs("Sydney");
-		
-		condition2.lhs("billingCountry");
-		condition2.operator(SoqlOperator.Comparison.EQ_T);
-		condition2.rhs("Australia");
-		
-		
-		SoqlConditions conditions = new SoqlConditions();
-		conditions.and(condition1,condition2);
-		soql.where(conditions);
-		
-		
+		soql.where(conditions3);
 		System.out.println(soql);
-		
-		
-		//select id from Account where id = '00O40000003Q9cR'
 	}
 
 }
