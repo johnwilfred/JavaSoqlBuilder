@@ -29,7 +29,7 @@ public class Main {
 
 		SoqlCondition condition = new SoqlCondition();
 		condition.lhs("id");
-		condition.operator(SoqlOperator.Comparison.IN);
+		condition.operator(SoqlOperator.Comparison.EQ_T);
 		condition.rhs("00O40000003Q9cR");
 		soql.where(condition);
 
@@ -67,14 +67,15 @@ public class Main {
 		conditions1.and(billingCountryIsNz,billingCountryIsAu);
 		
 		SoqlConditions conditions2 = new SoqlConditions();
-		conditions2.or(billingCountryIsAu,profitCheck);
+		conditions2.and(revenueCheck,profitCheck);
 		
 		
 		SoqlConditions conditions3 = new SoqlConditions();
-		conditions3.and(conditions1,conditions2);
+		conditions3.or(conditions1,conditions2);
 		
 		soql.where(conditions3);
 		System.out.println(soql);
+		
 	}
 
 }
