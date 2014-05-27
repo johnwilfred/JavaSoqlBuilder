@@ -1,4 +1,4 @@
-package com.h2s.jw.main;
+package org.h2s.jw.main;
 
 import org.h2s.jw.soql.SoqlCondition;
 import org.h2s.jw.soql.SoqlConditions;

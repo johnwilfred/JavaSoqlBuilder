@@ -74,9 +74,10 @@ public class SoqlCondition {
 			String soql  = comparisonOperator.getValue();
 			soql= soql.replace("lhs", this.lhs).replace("rhs", this.rhs);
 			return soql;
+		} else {
+			System.out.println("Comparison operator cannot be null");
+			return "";
 		}
-		System.out.println("Comparison operator cannot be null");
-		return "";
 	}
 	
 
